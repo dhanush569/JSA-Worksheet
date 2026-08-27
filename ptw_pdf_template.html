@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Permit to Work (PTW)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            margin: 0;
+            padding: 0;
+            color: #000;
+            background-color: #ffffff;
+        }
+        .page {
+            width: 210mm;
+            height: 297mm;
+            padding: 10mm 15mm;
+            box-sizing: border-box;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            font-size: 16px;
+            margin: 0 0 5px 0;
+            text-transform: uppercase;
+        }
+        .header-meta {
+            text-align: center;
+            font-size: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .section-title {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            padding: 4px;
+            border: 1px solid #000;
+            margin-top: 8px;
+            font-size: 12px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 5px;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 4px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .field-label {
+            font-weight: bold;
+            width: 20%;
+            background-color: #f9f9f9;
+        }
+        .field-value {
+            width: 30%;
+        }
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 5px;
+            margin: 5px 0;
+        }
+        .checklist-item {
+            margin: 3px 0;
+            display: flex;
+            align-items: flex-start;
+        }
+        .checklist-item span:first-child {
+            margin-right: 5px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .signature-table td {
+            height: 30px;
+            vertical-align: middle;
+        }
+        .declaration {
+            font-style: italic;
+            font-size: 10px;
+            margin: 3px 0;
+        }
+        .text-center { text-align: center; }
+        
+        @media print {
+            body { margin: 0; }
+            .page { padding: 0; margin: 0; box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <h1>PERMIT TO WORK (PTW)</h1>
+        <div class="header-meta">Document Ref: FR-HSE-07 | Rev: 00</div>
+
+        <!-- 1. GENERAL DETAILS -->
+        <div class="section-title">1. GENERAL DETAILS</div>
+        <table>
+            <tr>
+                <td class="field-label">Permit Number</td>
+                <td class="field-value">PTW-2026-001</td>
+                <td class="field-label">JSA Number</td>
+                <td class="field-value">JSA-2026-042</td>
+            </tr>
+            <tr>
+                <td class="field-label">Date</td>
+                <td class="field-value">26-Aug-2026</td>
+                <td class="field-label">Time (Start / End)</td>
+                <td class="field-value">09:00 AM to 06:00 PM</td>
+            </tr>
+            <tr>
+                <td class="field-label">Location</td>
+                <td class="field-value">Assembly Line B</td>
+                <td class="field-label">Persons Involved</td>
+                <td class="field-value">4</td>
+            </tr>
+            <tr>
+                <td class="field-label">Contractor</td>
+                <td colspan="3">ABC Engineering Ltd.</td>
+            </tr>
+            <tr>
+                <td class="field-label">Work Description</td>
+                <td colspan="3">Routine maintenance and welding on the overhead conveyor system in Assembly Line B.</td>
+            </tr>
+        </table>
+
+        <!-- 2. TYPE OF WORK & SUPPORTING DOCS -->
+        <div class="section-title">2. TYPE OF WORK & SUPPORTING DOCUMENTS</div>
+        <div style="border: 1px solid #000; padding: 5px; border-top: none;">
+            <strong>Work Types Permitted:</strong>
+            <div class="checkbox-grid">
+                <div>[X] Hot Work</div>
+                <div>[X] Height Work</div>
+                <div>[ ] Confined Space</div>
+                <div>[ ] Electrical Work</div>
+            </div>
+            <table style="margin-top: 5px; margin-bottom: 0;">
+                <tr>
+                    <td class="field-label" style="width: 15%">LOTO Number:</td>
+                    <td style="width: 18%">L-4091</td>
+                    <td class="field-label" style="width: 15%">TBT Ref:</td>
+                    <td style="width: 18%">TBT-112</td>
+                    <td class="field-label" style="width: 15%">JSA Attached:</td>
+                    <td>Yes</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- 3. SAFETY CHECKLIST -->
+        <div class="section-title">3. SAFETY CHECKLIST (Verified on site)</div>
+        <div style="border: 1px solid #000; padding: 5px; border-top: none; display: flex; gap: 15px;">
+            <div style="flex: 1;">
+                <strong>Common & General Work</strong>
+                <div class="checklist-item"><span>[X]</span> Has the worker been trained for this task?</div>
+                <div class="checklist-item"><span>[X]</span> Are all tools/equipment inspected and safe?</div>
+                <div class="checklist-item"><span>[X]</span> Housekeeping done; pits/sumps covered?</div>
+                <div class="checklist-item"><span>[X]</span> Necessary barricades/warning signs in place?</div>
+            </div>
+            <div style="flex: 1;">
+                <strong>Hot Work</strong>
+                <div class="checklist-item"><span>[X]</span> Combustibles removed within 10m?</div>
+                <div class="checklist-item"><span>[X]</span> Cylinders equipped with flashback arrestors?</div>
+                <div class="checklist-item"><span>[X]</span> Fire fighting equipment available?</div>
+                <div class="checklist-item"><span>[X]</span> Dedicated fire watcher in place?</div>
+            </div>
+            <div style="flex: 1;">
+                <strong>Height Work</strong>
+                <div class="checklist-item"><span>[X]</span> Members medically fit and trained?</div>
+                <div class="checklist-item"><span>[X]</span> Scaffolding/platform green tagged?</div>
+                <div class="checklist-item"><span>[X]</span> Tools/materials secured with rope/bag?</div>
+            </div>
+        </div>
+
+        <!-- 4. PERMIT ISSUANCE -->
+        <div class="section-title">4. PERMIT ISSUANCE</div>
+        <p class="declaration">We have inspected the location and confirmed all necessary precautions are in place. The location is safe for work.</p>
+        <table class="signature-table">
+            <tr>
+                <th>Role</th>
+                <th>Name</th>
+                <th>Signature / Status</th>
+            </tr>
+            <tr>
+                <td class="field-label">Permit Initiator</td>
+                <td>John Doe</td>
+                <td><em>Signed electronically</em></td>
+            </tr>
+            <tr>
+                <td class="field-label">Contractor</td>
+                <td>Jane Smith</td>
+                <td><em>Signed electronically</em></td>
+            </tr>
+            <tr>
+                <td class="field-label">Permit Authoriser</td>
+                <td>Alan Planthead</td>
+                <td><em>Pending Approval</em></td>
+            </tr>
+        </table>
+
+        <!-- 5. VERIFICATION BY HSE -->
+        <div class="section-title">5. VERIFICATION BY HSE</div>
+        <p class="declaration">I have checked and verified all safety precautions and found the workplace is safe to work.</p>
+        <table class="signature-table">
+            <tr>
+                <td class="field-label" style="width: 15%">HSE Personnel</td>
+                <td>Sarah Safety</td>
+                <td class="field-label" style="width: 10%">Date</td>
+                <td style="width: 15%">26-Aug-2026</td>
+                <td class="field-label" style="width: 10%">Time</td>
+                <td style="width: 15%">08:45 AM</td>
+                <td class="field-label" style="width: 15%">Signature</td>
+                <td><em>Signed electronically</em></td>
+            </tr>
+        </table>
+
+        <!-- 6. PERMIT CLOSURE -->
+        <div class="section-title">6. PERMIT CLOSURE</div>
+        <p class="declaration">Work completed. Area inspected, risk-free, and cleaned. Equipment removed. Area ready for normal operations.</p>
+        <table class="signature-table">
+            <tr>
+                <th>Role</th>
+                <th>Name</th>
+                <th>Signature (Physical)</th>
+            </tr>
+            <tr>
+                <td class="field-label">Permit Initiator</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="field-label">Contractor</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="field-label">HSE Personnel</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+        <div style="border: 1px solid #000; border-top: none; padding: 5px;">
+            <strong>Photo Evidence:</strong> <em>No photo attached yet.</em>
+        </div>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+/* ============================================================================
+   JSA Portal — FR-HSE-38 Rev-00
+   Stylesheet entry point. `main.jsx` imports this one file; everything else is
+   layered below it in the order the cascade needs:
+
+     tokens      the only place a colour, size or duration is defined
+     base        reset, document typography, focus, motion, print
+     components  every reusable surface (cards, controls, tables, ribbon…)
+     layout      the app frame, navigation, page shells and all breakpoints
+
+   Design notes
+   ------------
+   · Colour carries meaning only. Blue is action, green approved, amber waiting
+     or machine-drafted, red rejected or high risk, violet on hold. Nothing is
+     tinted for decoration.
+   · Type: Archivo labels and titles, Public Sans for reading and data entry,
+     IBM Plex Mono for the things that identify a controlled document — form
+     numbers, JSA numbers, usernames, the acknowledgement code.
+   · Uppercase is reserved for small eyebrow labels. Buttons, tabs and headings
+     are sentence case, which is what made the largest readability difference.
+   · State is never signalled by colour alone: a ticked permit also gets a bar,
+     a machine-drafted cell also gets a gutter, a locked worksheet also gets an
+     icon and a hazard rule.
+   ============================================================================ */
+
+@import './tokens.css';
+@import './base.css';
+@import './components.css';
+@import './layout.css';

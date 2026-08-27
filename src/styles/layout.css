@@ -1,0 +1,759 @@
+/* ============================================================================
+   LAYOUT — the app frame, navigation, page shells and every breakpoint.
+   ============================================================================ */
+
+/* ==========================================================================
+   1. SHELL
+   A fixed masthead and nav with one scrolling region beneath, so the header
+   never moves while a long worksheet is filled in.
+   ========================================================================== */
+.shell {
+  height: 100dvh;
+  display: grid;
+  grid-template-rows: var(--h-mast) var(--h-nav) minmax(0, 1fr);
+  overflow: hidden;
+  background: radial-gradient(circle at 10% 10%, rgba(27, 102, 211, 0.05), transparent 40%),
+              radial-gradient(circle at 90% 90%, rgba(107, 75, 175, 0.05), transparent 40%),
+              var(--paper);
+}
+
+/* The emailed approval link renders without the nav band. */
+.shell-flat { grid-template-rows: var(--h-mast) minmax(0, 1fr); }
+
+.shell-main {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   2. MASTHEAD
+   Logo, the document identity, and who you are. The form number is set in the
+   mono face because that is what identifies a controlled document.
+   ========================================================================== */
+.header,
+.masthead {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr) minmax(0, auto);
+  align-items: center;
+  gap: var(--s-3);
+  padding: 0 var(--s-4);
+  background: var(--surface-head);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: var(--sh-1);
+  z-index: var(--z-mast);
+  min-width: 0;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+.header-logo img { height: 30px; width: auto; display: block; }
+
+/* Fallback wordmark when no logo file is present. */
+.wordmark {
+  font-family: var(--f-display);
+  font-size: var(--t-xl);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background: var(--brand);
+  padding: 2px var(--s-2);
+  border-radius: var(--r-xs);
+  line-height: 1.2;
+  display: inline-block;
+}
+.wordmark-sub {
+  font-family: var(--f-display);
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  text-align: center;
+  margin-top: 2px;
+}
+
+/* The title block is left-aligned against the logo rather than centred: it
+   reads as a document heading, not a banner. */
+.header-title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-3);
+  min-width: 0;
+  padding-left: var(--s-3);
+  border-left: 1px solid var(--line);
+}
+.header-title h1 {
+  margin: 0;
+  font-family: var(--f-display);
+  font-size: var(--t-lg);
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  text-transform: none;
+  white-space: nowrap;
+}
+.header-title .docref { flex: 0 1 auto; overflow: hidden; text-overflow: ellipsis; }
+
+.header-meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--s-2);
+  min-width: 0;
+}
+
+/* ==========================================================================
+   3. NAVIGATION
+   One navy band. Tabs are sentence case with an underline for the active item
+   — the underline sits on the band edge so it also reads as a connection to
+   the page below.
+   ========================================================================== */
+.navtabs,
+.masthead-nav {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  background: linear-gradient(135deg, var(--brand-navy) 0%, #08172c 100%);
+  padding: 0 var(--s-2);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  z-index: calc(var(--z-mast) - 1);
+}
+.navtabs::-webkit-scrollbar { display: none; }
+
+.navtab {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: #b9cde8;
+  font-family: var(--f-display);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  text-decoration: none;
+  padding: 0 var(--s-3);
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  white-space: nowrap;
+  cursor: pointer;
+  position: relative;
+  transition: color var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
+}
+.navtab::after {
+  content: '';
+  position: absolute;
+  inset: auto var(--s-2) 0 var(--s-2);
+  height: 3px;
+  border-radius: 2px 2px 0 0;
+  background: transparent;
+  transition: background var(--dur-2) var(--ease);
+}
+.navtab:hover { color: #fff; background: rgba(255, 255, 255, .07); }
+.navtab.active { color: #fff; }
+.navtab.active::after { background: var(--brand-200); }
+
+.navtab .count {
+  font-family: var(--f-mono);
+  font-size: var(--t-2xs);
+  font-weight: 500;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-pill);
+  background: var(--danger);
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+
+.navtabs .rail-spacer,
+.rail-spacer { flex: 1 1 auto; min-width: var(--s-2); }
+
+.whoami {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 0 var(--s-3);
+  color: #fff;
+  white-space: nowrap;
+}
+.whoami-name { display: flex; flex-direction: column; line-height: 1.25; }
+.whoami-name b { font-family: var(--f-display); font-size: var(--t-sm); font-weight: 600; }
+.whoami .role {
+  font-family: var(--f-mono);
+  font-size: var(--t-2xs);
+  color: #93a7c1;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.linkbtn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, .32);
+  color: #fff;
+  font-family: var(--f-display);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  padding: 5px var(--s-2);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: background var(--dur-1) var(--ease);
+}
+.linkbtn:hover { background: rgba(255, 255, 255, .14); }
+
+/* ==========================================================================
+   4. WIZARD RAIL
+   Previously a second dark band, which made the top of the app very heavy.
+   It is now a light rail on the paper: three steps, numbered because the
+   worksheet genuinely is filled in that order.
+   ========================================================================== */
+.rail,
+.wizard {
+  display: flex;
+  align-items: stretch;
+  gap: var(--s-1);
+  padding: var(--s-2) var(--s-4) 0;
+  background: var(--paper);
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex: none;
+}
+.rail::-webkit-scrollbar { display: none; }
+
+.rail-step,
+.wizard-step {
+  appearance: none;
+  border: 1px solid var(--line);
+  border-bottom: 0;
+  background: var(--n-25);
+  color: var(--ink-3);
+  font-family: var(--f-display);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--r-sm) var(--r-sm) 0 0;
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  white-space: nowrap;
+  cursor: pointer;
+  position: relative;
+  transition: background var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
+}
+.rail-step:hover { background: var(--n-100); color: var(--ink); }
+
+.rail-step[aria-current='true'] {
+  background: var(--surface);
+  color: var(--brand-active);
+  border-color: var(--line);
+}
+/* Ties the active tab to the sheet below it. */
+.rail-step[aria-current='true']::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 -1px 0;
+  height: 1px;
+  background: var(--surface);
+}
+
+.rail-num,
+.wizard-index {
+  font-family: var(--f-mono);
+  font-size: var(--t-2xs);
+  font-weight: 600;
+  width: 20px; height: 20px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-pill);
+  background: var(--n-150);
+  color: var(--ink-3);
+  flex: none;
+  transition: background var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
+}
+.rail-step[aria-current='true'] .rail-num { background: var(--brand); color: #fff; }
+
+/* The step label has a long and a short form; the short one takes over before
+   the rail would need to scroll. */
+.rail-step-short { display: none; }
+
+@media (max-width: 1080px) {
+  .rail-step-long { display: none; }
+  .rail-step-short { display: inline; }
+}
+
+.rail-note {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-2) var(--s-3);
+  color: var(--ink-3);
+  font-size: var(--t-xs);
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+  align-self: center;
+}
+
+/* ==========================================================================
+   5. SCROLLING CONTENT REGIONS
+   ========================================================================== */
+.sheet,
+.page {
+  overflow: auto;
+  overscroll-behavior-y: contain;
+  padding: var(--s-3) var(--s-4) var(--s-6);
+  flex: 1 1 auto;
+  min-height: 0;
+}
+/* The worksheet's top edge meets the wizard rail, so no gap above it. */
+.sheet { padding-top: 0; }
+
+.sheet-inner,
+.page-inner {
+  max-width: var(--w-page);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  min-width: 0;
+}
+
+.page-head {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+  padding: var(--s-1) 0 var(--s-2);
+}
+.page-head h1 {
+  margin: 0;
+  font-family: var(--f-display);
+  font-size: var(--t-2xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  line-height: 1.1;
+}
+.page-head .lede {
+  color: var(--ink-3);
+  font-size: var(--t-sm);
+  line-height: var(--lh-snug);
+  max-width: 62ch;
+  flex: 1 1 300px;
+}
+.page-head .grow { flex: 1 1 auto; }
+
+/* Two-column management layout. */
+.split {
+  display: grid;
+  grid-template-columns: minmax(320px, 380px) minmax(0, 1fr);
+  gap: var(--s-3);
+  align-items: start;
+  min-width: 0;
+}
+
+/* ==========================================================================
+   6. SIGN IN
+   A brand panel and a card. The panel carries the route the worksheet takes,
+   because that is what a new signatory most needs to understand.
+   ========================================================================== */
+.login-shell {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+  background: var(--paper);
+}
+
+.login-brand,
+.brandpanel {
+  position: relative;
+  background:
+    radial-gradient(1000px 520px at 12% -10%, #17457d 0%, transparent 60%),
+    var(--brand-navy);
+  color: #fff;
+  padding: var(--s-12) var(--s-10);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--s-8);
+  overflow: hidden;
+}
+
+/* A single hairline grid, the way a drawing sheet is ruled. Quiet enough to be
+   texture rather than pattern. */
+.login-brand::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .05) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(120% 100% at 0% 0%, #000 30%, transparent 75%);
+  pointer-events: none;
+}
+.login-brand > * { position: relative; }
+
+.login-brand h1 {
+  font-family: var(--f-display);
+  font-size: var(--t-4xl);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  text-transform: none;
+  color: #fff;
+  margin: 0 0 var(--s-3);
+}
+.login-brand .docref { color: #93a7c1; }
+.login-brand p {
+  font-size: var(--t-lg);
+  line-height: var(--lh-body);
+  color: #cddcee;
+  max-width: 44ch;
+  margin: 0;
+}
+
+/* The approval route, shown as the chain it is. */
+.login-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  align-items: center;
+  font-family: var(--f-display);
+  font-size: var(--t-xs);
+  color: #93a7c1;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.login-flow b {
+  color: #fff;
+  font-weight: 600;
+  background: rgba(255, 255, 255, .1);
+  border: 1px solid rgba(255, 255, 255, .18);
+  padding: 4px var(--s-2);
+  border-radius: var(--r-sm);
+}
+
+.login-panel {
+  display: grid;
+  place-items: center;
+  padding: var(--s-6);
+  min-width: 0;
+}
+
+.login-card {
+  width: min(420px, 100%);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-2);
+  padding: var(--s-8) var(--s-6) var(--s-6);
+}
+.login-card h2 {
+  margin: 0 0 var(--s-1);
+  font-family: var(--f-display);
+  font-size: var(--t-2xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: none;
+}
+.login-card .sub { color: var(--ink-3); font-size: var(--t-md); margin-bottom: var(--s-5); }
+
+.login-error {
+  background: var(--danger-surface);
+  border: 1px solid var(--danger-edge);
+  color: var(--danger);
+  border-radius: var(--r-sm);
+  padding: var(--s-2) var(--s-3);
+  font-size: var(--t-sm);
+  line-height: var(--lh-snug);
+  margin-bottom: var(--s-4);
+  display: flex;
+  gap: var(--s-2);
+  align-items: flex-start;
+}
+
+.login-demo {
+  margin-top: var(--s-5);
+  border-top: 1px solid var(--line);
+  padding-top: var(--s-3);
+  font-size: var(--t-xs);
+  color: var(--ink-3);
+  line-height: var(--lh-snug);
+}
+.login-demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--s-1);
+  margin-top: var(--s-2);
+}
+.login-demo-grid button {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: var(--n-25);
+  border-radius: var(--r-sm);
+  padding: var(--s-1) var(--s-2);
+  font-family: var(--f-display);
+  font-size: var(--t-xs);
+  font-weight: 500;
+  color: var(--ink-2);
+  cursor: pointer;
+  text-align: left;
+  min-height: 30px;
+  transition: border-color var(--dur-1) var(--ease), color var(--dur-1) var(--ease),
+              background var(--dur-1) var(--ease);
+}
+.login-demo-grid button:hover {
+  border-color: var(--brand-200);
+  background: var(--brand-050);
+  color: var(--brand-active);
+}
+
+/* ==========================================================================
+   7. BREAKPOINTS
+   ========================================================================== */
+
+/* -- large laptops ------------------------------------------------------ */
+@media (max-width: 1280px) {
+  .row-3 { grid-template-columns: 140px minmax(0, 1fr) 140px minmax(0, 1fr); }
+  .row-2 { grid-template-columns: 140px minmax(0, 1fr); }
+  .split { grid-template-columns: minmax(300px, 330px) minmax(0, 1fr); }
+}
+
+/* -- small laptops and tablets in landscape ---------------------------- */
+@media (max-width: 1080px) {
+  .split { grid-template-columns: minmax(0, 1fr); }
+  .permit-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .ppe-grid    { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .permit-grid > * { border-right: 1px solid var(--line); }
+  .permit-grid > *:nth-child(4n) { border-right: 0; }
+  .ppe-grid > * { border-right: 1px solid var(--line); }
+  .ppe-grid > *:nth-child(3n) { border-right: 0; }
+  .permit-grid > *:nth-last-child(-n + 5),
+  .ppe-grid    > *:nth-last-child(-n + 4) { border-bottom: 1px solid var(--line); }
+
+  .login-shell { grid-template-columns: minmax(0, 1fr); }
+  .login-brand {
+    padding: var(--s-6) var(--s-5);
+    gap: var(--s-4);
+  }
+  .login-brand h1 { font-size: var(--t-3xl); }
+  .login-brand p { font-size: var(--t-md); }
+  .login-panel { padding: var(--s-5) var(--s-4) var(--s-8); }
+}
+
+/* -- tablets and phones: the ruled form becomes a stacked form ---------- */
+@media (max-width: 900px) {
+  .row-3,
+  .row-2,
+  .row-1 { grid-template-columns: minmax(0, 1fr); }
+
+  /* Label sits above its field, and the vertical rules disappear because
+     there are no longer columns for them to divide. */
+  .cell-label {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    min-height: 0;
+    padding: 6px var(--s-3) 4px;
+    font-size: var(--t-xs);
+    font-weight: 700;
+    letter-spacing: var(--track-eyebrow);
+    text-transform: uppercase;
+    color: var(--ink-3);
+    background: var(--n-25);
+  }
+  .cell-input {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .row > .cell-input:last-child { border-bottom: 0; }
+
+  .signoff-field { grid-template-columns: minmax(0, 1fr); }
+  .signoff-field > span:first-child { border-right: 0; border-bottom: 1px solid var(--line); }
+
+  .trail-row {
+    grid-template-columns: 34px minmax(0, 1fr);
+    row-gap: var(--s-1);
+  }
+  .trail-row > .trail-stage:first-of-type { grid-column: 2; }
+  .trail-row > * { grid-column: 2; }
+  .trail-row > .trail-seq { grid-column: 1; grid-row: 1 / span 2; align-self: start; }
+  .trail-when { text-align: left; }
+}
+
+/* -- grid rows become stacked cards -----------------------------------
+   Every cell that carries a `data-label` prints its own label, so a table
+   that needed seven columns on a desktop reads as a labelled block on a
+   phone without a horizontal scrollbar. */
+@media (max-width: 860px) {
+  .list-row.head,
+  .dt-row.head,
+  .register-row.head { display: none; }
+
+  .list-row,
+  .dt-row,
+  .register-row {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: var(--s-1);
+    padding: var(--s-3);
+    align-items: start;
+  }
+
+  .list-row > *,
+  .dt-row > *,
+  .register-row > * {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s-2);
+    min-width: 0;
+    text-align: left !important;
+    justify-content: flex-start !important;
+  }
+
+  .list-row > *[data-label]::before,
+  .dt-row > *[data-label]::before,
+  .register-row > *[data-label]::before {
+    content: attr(data-label);
+    flex: 0 0 96px;
+    font-family: var(--f-display);
+    font-size: var(--t-2xs);
+    font-weight: 700;
+    letter-spacing: var(--track-eyebrow);
+    text-transform: uppercase;
+    color: var(--ink-3);
+    padding-top: 2px;
+  }
+
+  /* An actions cell has nothing to label, so it gets a rule instead. */
+  .list-row > .dt-actions,
+  .dt-row > .dt-actions {
+    justify-content: flex-end !important;
+    padding-top: var(--s-2);
+    margin-top: var(--s-1);
+    border-top: 1px solid var(--line);
+    width: 100%;
+  }
+  .list-row > *:empty { display: none; }
+
+  .metrics,
+  .statgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* -- phones ------------------------------------------------------------ */
+@media (max-width: 720px) {
+  :root {
+    --h-mast: 52px;
+    --s-4: 12px;
+  }
+
+  .sheet,
+  .page { padding-left: var(--s-3); padding-right: var(--s-3); }
+  .rail,
+  .wizard { padding-left: var(--s-3); padding-right: var(--s-3); }
+
+  .header,
+  .masthead {
+    grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+    padding: 0 var(--s-3);
+    gap: var(--s-2);
+  }
+  .header-logo img { height: 24px; }
+  /* Plant and role chips are dropped on a phone; the nav band already shows
+     who is signed in and the header would otherwise wrap. */
+  .header-meta .chip { display: none; }
+  /* Icon-only header buttons: the label would push the masthead to two rows. */
+  .header-meta .btn-label { display: none; }
+  .header-meta .btn { padding: 0 var(--s-2); }
+  .header-title {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding-left: var(--s-2);
+  }
+  .header-title h1 { font-size: var(--t-md); }
+  .header-title .docref { font-size: 9.5px; }
+  .header-meta { grid-column: 3; }
+
+  .navtabs .whoami { display: none; }
+  .navtab { padding: 0 var(--s-2); font-size: var(--t-xs); }
+
+  .page-head h1 { font-size: var(--t-xl); }
+  .page-head .lede { flex-basis: 100%; }
+
+  .permit-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ppe-grid    { grid-template-columns: minmax(0, 1fr); }
+  .permit-grid > *:nth-child(2n) { border-right: 0; }
+  .permit-grid > *:nth-child(2n + 1) { border-right: 1px solid var(--line); }
+  .ppe-grid > * { border-right: 0; }
+
+  .permit { padding: var(--s-2) var(--s-1); }
+  .permit-label { font-size: var(--t-2xs); }
+
+  .metrics,
+  .statgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .metric,
+  .stat { border-right: 0; }
+  .metric:nth-child(odd),
+  .stat:nth-child(odd) { border-right: 1px solid var(--line); }
+  .metric .v,
+  .stat .v { font-size: var(--t-2xl); }
+
+  .ribbon { padding: var(--s-2); }
+  .ribbon-node { min-width: 116px; }
+
+  .actionbar {
+    padding: var(--s-2);
+    gap: var(--s-2);
+  }
+  .actionbar .btn { flex: 1 1 auto; }
+  .actionbar .status-line { flex-basis: 100%; }
+
+  .toast-stack {
+    left: var(--s-3);
+    right: var(--s-3);
+    bottom: var(--s-3);
+    max-width: none;
+  }
+  .toast { min-width: 0; max-width: none; }
+
+  .scrim { padding: 0; align-items: flex-end; }
+  .modal {
+    width: 100%;
+    max-height: 92dvh;
+    border-radius: var(--r-lg) var(--r-lg) 0 0;
+    border-bottom: 0;
+  }
+  .modal-body { padding: var(--s-3); }
+  .modal-foot { padding: var(--s-3); }
+  .modal-foot .btn { flex: 1 1 auto; }
+
+  .table-wrap { max-height: none !important; }
+
+  .code-input { width: 100%; }
+  .code-entry .btn { flex: 1 1 auto; }
+}
+
+/* Very narrow phones: the document reference is the first thing to go. */
+@media (max-width: 420px) {
+  .header-title .docref { display: none; }
+  .login-card { padding: var(--s-5) var(--s-4); }
+}
+
+/* Short viewports (a docked laptop in landscape) — reclaim vertical space. */
+@media (max-height: 620px) {
+  .login-brand { display: none; }
+  .login-shell { grid-template-columns: minmax(0, 1fr); }
+}
