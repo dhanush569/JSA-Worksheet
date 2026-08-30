@@ -551,13 +551,15 @@ export default function Page4({ onBack, onNext }) {
             </table>
 
             <h3 style={{ marginTop: '20px', marginBottom: '8px' }}>Attachments</h3>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: '#fff', border: '1px solid #cbd5e1', borderRadius: '4px' }}>
-              <FaFilePdf size={24} color="#ef4444" />
-              <div>
-                <div style={{ fontWeight: 'bold' }}>PTW_{page4.permit_number || page1.permit_no || 'Draft'}.pdf</div>
-                <div style={{ fontSize: '0.8em', color: '#64748b' }}>Complete Permit to Work Sheet</div>
+            <a href="/ptw_template.html" target="_blank" rel="noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: '#fff', border: '1px solid #cbd5e1', borderRadius: '4px', cursor: 'pointer' }}>
+                <FaFilePdf size={24} color="#ef4444" />
+                <div>
+                  <div style={{ fontWeight: 'bold' }}>PTW_{page4.permit_number || page1.permit_no || 'Draft'}.pdf</div>
+                  <div style={{ fontSize: '0.8em', color: '#64748b' }}>Complete Permit to Work Sheet</div>
+                </div>
               </div>
-            </div>
+            </a>
 
             <div style={{ marginTop: '30px', display: 'flex', gap: '10px' }}>
               <button style={{ padding: '10px 16px', background: '#10b981', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>Accept</button>
