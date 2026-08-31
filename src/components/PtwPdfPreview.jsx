@@ -1,6 +1,5 @@
 import { useJsa } from '../context/JsaContext.jsx'
 import { WORK_PERMITS } from '../data/permits.js'
-import { FaCheck } from 'react-icons/fa6'
 
 const CHECKLIST_SECTIONS = [
   {
@@ -45,7 +44,7 @@ const CHECKLIST_SECTIONS = [
       'Are tools/materials secured with a rope, carried in a Toolbag tied to a rope, or attached to the person with a tool belt?',
       'Ensure scaffolding or aerial work platforms (boom/scissor lifts) are securely positioned, with stable bases, safe access, adequate platforms, proper guardrails, toe guards, functioning wheel locks (for mobile scaffolds), in good condition, and green tagged for safe use.',
       'Check if the ladder is in good condition, green tagged ("Safe for Use"), secured at the top, extends(Approx 1m), and ensures 3-point contact while climbing.',
-      'Boom/scissor lift  Emergency control, load details & trained operator?'
+      'Boom/scissor lift Emergency control, load details & trained operator?'
     ]
   },
   {
@@ -92,7 +91,7 @@ const CHECKLIST_SECTIONS = [
 ]
 
 export default function PtwPdfPreview() {
-  const { page1, page4 } = useJsa()
+  const { page1 = {}, page4 = {} } = useJsa() || {}
 
   // Format date/time helpers
   const todayDate = new Date().toISOString().slice(0, 10)
@@ -107,7 +106,8 @@ export default function PtwPdfPreview() {
     CHECKLIST_SECTIONS.forEach((section, sIndex) => {
       let activeQs = []
       section.questions.forEach((q, qIndex) => {
-        if (page4.checklist[`${sIndex}_${qIndex}`] === 'Yes') {
+        // use - hyphen for correct key match
+        if (page4.checklist[`${sIndex}-${qIndex}`] === 'Yes') {
           activeQs.push(q)
         }
       })
@@ -119,107 +119,81 @@ export default function PtwPdfPreview() {
   }
 
   const activeChecklists = getActiveChecklists()
-  
-  const brandBlue = '#1b66d3'
-  const brandLight = '#f4f8fc'
-  const borderColor = '#cdd6e2'
 
   return (
-    <div style={{ backgroundColor: '#fff', color: '#374252', padding: '40px', fontFamily: '"Inter", "Helvetica Neue", Arial, sans-serif', fontSize: '13px', maxWidth: '900px', margin: '0 auto', boxShadow: '0 10px 24px rgba(0, 0, 0, 0.05)', borderRadius: '8px' }}>
-        
-        {/* Header Section */}
-        <div style={{ borderBottom: `4px solid ${brandBlue}`, paddingBottom: '20px', marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-          <div>
-            <h1 style={{ margin: '0 0 8px 0', fontSize: '24px', color: brandBlue, textTransform: 'uppercase', letterSpacing: '0.5px' }}>PERMIT TO WORK (PTW)</h1>
-            <div style={{ fontSize: '11px', color: '#8593a6', fontWeight: '600' }}>DOCUMENT REF: FR-HSE-07 | REV: 00</div>
-          </div>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '12px', fontWeight: 'bold' }}>Date Generated:</div>
-            <div style={{ color: '#5f6d80' }}>{new Date().toLocaleDateString()}</div>
-          </div>
-        </div>
+    <div style={{ backgroundColor: '#fff', color: '#000', padding: '20px', fontFamily: 'Arial, sans-serif', fontSize: '11px', maxWidth: '800px', margin: '0 auto' }}>
+        <h1 style={{ textAlign: 'center', fontSize: '16px', margin: '0 0 5px 0', textTransform: 'uppercase' }}>PERMIT TO WORK (PTW)</h1>
+        <div style={{ textAlign: 'center', fontSize: '10px', marginBottom: '10px', fontWeight: 'bold' }}>Document Ref: FR-HSE-07 | Rev: 00</div>
 
         {/* 1. GENERAL DETAILS */}
-        <div style={{ backgroundColor: brandBlue, color: '#fff', fontWeight: 'bold', padding: '8px 12px', borderRadius: '4px 4px 0 0', fontSize: '13px', letterSpacing: '0.5px' }}>1. GENERAL DETAILS</div>
-        <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '24px' }}>
+        <div style={{ backgroundColor: '#f0f0f0', fontWeight: 'bold', padding: '4px', border: '1px solid #000', marginTop: '8px', fontSize: '12px' }}>1. GENERAL DETAILS</div>
+        <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '5px' }}>
             <tbody>
             <tr>
-                <td style={{ border: `1px solid ${borderColor}`, padding: '10px 12px', fontWeight: '600', width: '20%', backgroundColor: brandLight, color: brandBlue }}>Permit Number</td>
-                <td style={{ border: `1px solid ${borderColor}`, padding: '10px 12px', width: '30%' }}>{page1.permit_no || 'Draft'}</td>
-                <td style={{ border: `1px solid ${borderColor}`, padding: '10px 12px', fontWeight: '600', width: '20%', backgroundColor: brandLight, color: brandBlue }}>JSA Number</td>
-                <td style={{ border: `1px solid ${borderColor}`, padding: '10px 12px', width: '30%' }}>{page4.jsa_number || page1.jsa_no || 'Draft'}</td>
+                <td style={{ border: '1px solid #000', padding: '4px', fontWeight: 'bold', width: '20%', backgroundColor: '#f9f9f9' }}>Permit Number</td>
+                <td style={{ border: '1px solid #000', padding: '4px', width: '30%' }}>{page1.permit_no || 'Draft'}</td>
+                <td style={{ border: '1px solid #000', padding: '4px', fontWeight: 'bold', width: '20%', backgroundColor: '#f9f9f9' }}>JSA Number</td>
+                <td style={{ border: '1px solid #000', padding: '4px', width: '30%' }}>{page4.jsa_number || page1.jsa_no || 'Draft'}</td>
             </tr>
             <tr>
-                <td style={{ border: `1px solid ${borderColor}`, padding: '10px 12px', fontWeight: '600', backgroundColor: brandLight, color: brandBlue }}>Date</td>
-                <td style={{ border: `1px solid ${borderColor}`, padding: '10px 12px' }}>{page4.date || todayDate}</td>
-                <td style={{ border: `1px solid ${borderColor}`, padding: '10px 12px', fontWeight: '600', backgroundColor: brandLight, color: brandBlue }}>Time (Start / End)</td>
-                <td style={{ border: `1px solid ${borderColor}`, padding: '10px 12px' }}>{page4.start_time || '00:00'} to {page4.end_time || '00:00'}</td>
+                <td style={{ border: '1px solid #000', padding: '4px', fontWeight: 'bold', backgroundColor: '#f9f9f9' }}>Date</td>
+                <td style={{ border: '1px solid #000', padding: '4px' }}>{page4.date || todayDate}</td>
+                <td style={{ border: '1px solid #000', padding: '4px', fontWeight: 'bold', backgroundColor: '#f9f9f9' }}>Time (Start / End)</td>
+                <td style={{ border: '1px solid #000', padding: '4px' }}>{page4.start_time || '00:00'} to {page4.end_time || '00:00'}</td>
             </tr>
             <tr>
-                <td style={{ border: `1px solid ${borderColor}`, padding: '10px 12px', fontWeight: '600', backgroundColor: brandLight, color: brandBlue }}>Location</td>
-                <td style={{ border: `1px solid ${borderColor}`, padding: '10px 12px' }}>{page1.location || 'Not specified'}</td>
-                <td style={{ border: `1px solid ${borderColor}`, padding: '10px 12px', fontWeight: '600', backgroundColor: brandLight, color: brandBlue }}>Persons Involved</td>
-                <td style={{ border: `1px solid ${borderColor}`, padding: '10px 12px' }}>{page4.persons_involved_count || '0'}</td>
+                <td style={{ border: '1px solid #000', padding: '4px', fontWeight: 'bold', backgroundColor: '#f9f9f9' }}>Location</td>
+                <td style={{ border: '1px solid #000', padding: '4px' }}>{page1.location || 'Not specified'}</td>
+                <td style={{ border: '1px solid #000', padding: '4px', fontWeight: 'bold', backgroundColor: '#f9f9f9' }}>Persons Involved</td>
+                <td style={{ border: '1px solid #000', padding: '4px' }}>{page4.persons_involved_count || '0'}</td>
             </tr>
             <tr>
-                <td style={{ border: `1px solid ${borderColor}`, padding: '10px 12px', fontWeight: '600', backgroundColor: brandLight, color: brandBlue }}>Contractor</td>
-                <td colSpan={3} style={{ border: `1px solid ${borderColor}`, padding: '10px 12px' }}>{page1.contractor || 'Not specified'}</td>
+                <td style={{ border: '1px solid #000', padding: '4px', fontWeight: 'bold', backgroundColor: '#f9f9f9' }}>Contractor</td>
+                <td colSpan={3} style={{ border: '1px solid #000', padding: '4px' }}>{page1.contractor || 'Not specified'}</td>
             </tr>
             <tr>
-                <td style={{ border: `1px solid ${borderColor}`, padding: '10px 12px', fontWeight: '600', backgroundColor: brandLight, color: brandBlue }}>Work Description</td>
-                <td colSpan={3} style={{ border: `1px solid ${borderColor}`, padding: '10px 12px' }}>{page1.job_description || 'Not specified'}</td>
+                <td style={{ border: '1px solid #000', padding: '4px', fontWeight: 'bold', backgroundColor: '#f9f9f9' }}>Work Description</td>
+                <td colSpan={3} style={{ border: '1px solid #000', padding: '4px' }}>{page1.job_description || 'Not specified'}</td>
             </tr>
             </tbody>
         </table>
 
         {/* 2. TYPE OF WORK & SUPPORTING DOCS */}
-        <div style={{ backgroundColor: brandBlue, color: '#fff', fontWeight: 'bold', padding: '8px 12px', borderRadius: '4px 4px 0 0', fontSize: '13px', letterSpacing: '0.5px' }}>2. TYPE OF WORK & SUPPORTING DOCUMENTS</div>
-        <div style={{ border: `1px solid ${borderColor}`, padding: '16px', borderTop: 'none', marginBottom: '24px', borderRadius: '0 0 4px 4px' }}>
-            
-            <div style={{ marginBottom: '16px' }}>
-              <div style={{ fontWeight: '600', color: brandBlue, marginBottom: '8px' }}>Work Types Permitted:</div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                  {activePermits.length > 0 ? activePermits.map(wp => (
-                    <div key={wp.key} style={{ background: brandLight, border: `1px solid ${brandBlue}`, color: brandBlue, padding: '4px 12px', borderRadius: '999px', fontSize: '12px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <FaCheck /> {wp.label}
-                    </div>
-                  )) : (
-                    <div style={{ color: '#8593a6', fontStyle: 'italic' }}>No specific work types selected.</div>
-                  )}
-              </div>
+        <div style={{ backgroundColor: '#f0f0f0', fontWeight: 'bold', padding: '4px', border: '1px solid #000', marginTop: '8px', fontSize: '12px' }}>2. TYPE OF WORK & SUPPORTING DOCUMENTS</div>
+        <div style={{ border: '1px solid #000', padding: '5px', borderTop: 'none' }}>
+            <strong>Work Types Permitted:</strong>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '5px', margin: '5px 0' }}>
+                {activePermits.length > 0 ? activePermits.map(wp => (
+                  <div key={wp.key}>[X] {wp.label}</div>
+                )) : (
+                  <div>None selected</div>
+                )}
             </div>
-
-            <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: '#fafbfc' }}>
+            <table style={{ marginTop: '5px', marginBottom: '0', width: '100%', borderCollapse: 'collapse' }}>
                 <tbody>
                 <tr>
-                    <td style={{ border: `1px solid ${borderColor}`, padding: '8px 12px', fontWeight: '600', width: '15%', color: brandBlue }}>LOTO Number:</td>
-                    <td style={{ border: `1px solid ${borderColor}`, padding: '8px 12px', width: '18%' }}>{page4.loto_number || 'N/A'}</td>
-                    <td style={{ border: `1px solid ${borderColor}`, padding: '8px 12px', fontWeight: '600', width: '15%', color: brandBlue }}>TBT Ref:</td>
-                    <td style={{ border: `1px solid ${borderColor}`, padding: '8px 12px', width: '18%' }}>{page4.tbt_number || 'N/A'}</td>
-                    <td style={{ border: `1px solid ${borderColor}`, padding: '8px 12px', fontWeight: '600', width: '15%', color: brandBlue }}>JSA Attached:</td>
-                    <td style={{ border: `1px solid ${borderColor}`, padding: '8px 12px' }}>
-                      <span style={{ display: 'inline-block', padding: '2px 8px', borderRadius: '4px', background: page4.jsa_checked ? '#0b8a53' : '#e0e4eb', color: page4.jsa_checked ? '#fff' : '#374252', fontWeight: 'bold' }}>
-                        {page4.jsa_checked ? 'YES' : 'NO'}
-                      </span>
-                    </td>
+                    <td style={{ fontWeight: 'bold', width: '15%' }}>LOTO Number:</td>
+                    <td style={{ width: '18%' }}>{page4.loto_number || 'N/A'}</td>
+                    <td style={{ fontWeight: 'bold', width: '15%' }}>TBT Ref:</td>
+                    <td style={{ width: '18%' }}>{page4.tbt_number || 'N/A'}</td>
+                    <td style={{ fontWeight: 'bold', width: '15%' }}>JSA Attached:</td>
+                    <td>{page4.jsa_checked ? 'Yes' : 'No'}</td>
                 </tr>
                 </tbody>
             </table>
         </div>
 
         {/* 3. SAFETY CHECKLIST */}
-        <div style={{ backgroundColor: brandBlue, color: '#fff', fontWeight: 'bold', padding: '8px 12px', borderRadius: '4px 4px 0 0', fontSize: '13px', letterSpacing: '0.5px' }}>3. SAFETY CHECKLIST (Verified on site)</div>
-        <div style={{ border: `1px solid ${borderColor}`, padding: '16px', borderTop: 'none', marginBottom: '24px', borderRadius: '0 0 4px 4px' }}>
+        <div style={{ backgroundColor: '#f0f0f0', fontWeight: 'bold', padding: '4px', border: '1px solid #000', marginTop: '8px', fontSize: '12px' }}>3. SAFETY CHECKLIST (Verified on site)</div>
+        <div style={{ border: '1px solid #000', padding: '5px', borderTop: 'none' }}>
             {activeChecklists.length > 0 ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div>
                 {activeChecklists.map((section, idx) => (
-                  <div key={idx}>
-                    <div style={{ fontWeight: 'bold', color: brandBlue, fontSize: '14px', marginBottom: '8px', borderBottom: `1px solid ${borderColor}`, paddingBottom: '4px' }}>
-                      {section.title}
-                    </div>
+                  <div key={idx} style={{ marginBottom: '10px' }}>
+                    <strong style={{ display: 'block', marginBottom: '4px' }}>{section.title}</strong>
                     {section.questions.map((q, qIdx) => (
-                      <div key={qIdx} style={{ margin: '6px 0', display: 'flex', alignItems: 'flex-start', lineHeight: '1.4' }}>
-                        <FaCheck style={{ color: '#0b8a53', marginTop: '3px', marginRight: '8px', flexShrink: 0 }} /> 
+                      <div key={qIdx} style={{ margin: '3px 0', display: 'flex', alignItems: 'flex-start' }}>
+                        <span style={{ marginRight: '5px', fontFamily: 'monospace', fontSize: '12px' }}>[X]</span>
                         <span>{q}</span>
                       </div>
                     ))}
@@ -227,47 +201,37 @@ export default function PtwPdfPreview() {
                 ))}
               </div>
             ) : (
-              <div style={{ color: '#8593a6', fontStyle: 'italic', textAlign: 'center', padding: '20px' }}>
-                No safety checklist items were marked as verified (Yes).
-              </div>
+              <div style={{ fontStyle: 'italic' }}>No safety checklist items were marked as verified (Yes).</div>
             )}
         </div>
 
         {/* 4. PERMIT ISSUANCE */}
-        <div style={{ backgroundColor: brandBlue, color: '#fff', fontWeight: 'bold', padding: '8px 12px', borderRadius: '4px 4px 0 0', fontSize: '13px', letterSpacing: '0.5px' }}>4. PERMIT ISSUANCE</div>
-        <div style={{ border: `1px solid ${borderColor}`, padding: '16px', borderTop: 'none', borderRadius: '0 0 4px 4px' }}>
-          <p style={{ fontStyle: 'italic', fontSize: '12px', margin: '0 0 12px 0', color: '#5f6d80' }}>
-            We have inspected the location and confirmed all necessary precautions are in place. The location is safe for work.
-          </p>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-              <tbody>
-              <tr>
-                  <th style={{ borderBottom: `2px solid ${brandBlue}`, padding: '8px', textAlign: 'left', color: brandBlue }}>Role</th>
-                  <th style={{ borderBottom: `2px solid ${brandBlue}`, padding: '8px', textAlign: 'left', color: brandBlue }}>Name</th>
-                  <th style={{ borderBottom: `2px solid ${brandBlue}`, padding: '8px', textAlign: 'left', color: brandBlue }}>Signature / Status</th>
-              </tr>
-              <tr>
-                  <td style={{ borderBottom: `1px solid ${borderColor}`, padding: '10px 8px', fontWeight: '600' }}>Permit Initiator</td>
-                  <td style={{ borderBottom: `1px solid ${borderColor}`, padding: '10px 8px' }}>{page4.permit_issuance?.initiator || 'Pending'}</td>
-                  <td style={{ borderBottom: `1px solid ${borderColor}`, padding: '10px 8px', color: '#0b8a53' }}><em>Signed electronically</em></td>
-              </tr>
-              <tr>
-                  <td style={{ borderBottom: `1px solid ${borderColor}`, padding: '10px 8px', fontWeight: '600' }}>Contractor</td>
-                  <td style={{ borderBottom: `1px solid ${borderColor}`, padding: '10px 8px' }}>{page4.permit_issuance?.contractor || 'Pending'}</td>
-                  <td style={{ borderBottom: `1px solid ${borderColor}`, padding: '10px 8px', color: page4.permit_issuance?.contractor ? '#0b8a53' : '#8593a6' }}>
-                    <em>{page4.permit_issuance?.contractor ? 'Signed electronically' : 'Pending'}</em>
-                  </td>
-              </tr>
-              <tr>
-                  <td style={{ padding: '10px 8px', fontWeight: '600' }}>Permit Authoriser</td>
-                  <td style={{ padding: '10px 8px' }}>{page4.permit_issuance?.authoriser || 'Pending'}</td>
-                  <td style={{ padding: '10px 8px', color: page4.permit_issuance?.authoriser ? '#0b8a53' : '#b07600' }}>
-                    <em>{page4.permit_issuance?.authoriser ? 'Signed electronically' : 'Pending Approval'}</em>
-                  </td>
-              </tr>
-              </tbody>
-          </table>
-        </div>
+        <div style={{ backgroundColor: '#f0f0f0', fontWeight: 'bold', padding: '4px', border: '1px solid #000', marginTop: '8px', fontSize: '12px' }}>4. PERMIT ISSUANCE</div>
+        <p style={{ fontStyle: 'italic', fontSize: '10px', margin: '3px 0' }}>We have inspected the location and confirmed all necessary precautions are in place. The location is safe for work.</p>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <tbody>
+            <tr>
+                <th style={{ border: '1px solid #000', padding: '4px', textAlign: 'left', backgroundColor: '#f9f9f9' }}>Role</th>
+                <th style={{ border: '1px solid #000', padding: '4px', textAlign: 'left', backgroundColor: '#f9f9f9' }}>Name</th>
+                <th style={{ border: '1px solid #000', padding: '4px', textAlign: 'left', backgroundColor: '#f9f9f9' }}>Signature / Status</th>
+            </tr>
+            <tr>
+                <td style={{ border: '1px solid #000', padding: '4px', fontWeight: 'bold', backgroundColor: '#f9f9f9' }}>Permit Initiator</td>
+                <td style={{ border: '1px solid #000', padding: '4px' }}>{page4.permit_issuance?.initiator || 'Pending'}</td>
+                <td style={{ border: '1px solid #000', padding: '4px' }}><em>Signed electronically</em></td>
+            </tr>
+            <tr>
+                <td style={{ border: '1px solid #000', padding: '4px', fontWeight: 'bold', backgroundColor: '#f9f9f9' }}>Contractor</td>
+                <td style={{ border: '1px solid #000', padding: '4px' }}>{page4.permit_issuance?.contractor || 'Pending'}</td>
+                <td style={{ border: '1px solid #000', padding: '4px' }}><em>{page4.permit_issuance?.contractor ? 'Signed electronically' : 'Pending'}</em></td>
+            </tr>
+            <tr>
+                <td style={{ border: '1px solid #000', padding: '4px', fontWeight: 'bold', backgroundColor: '#f9f9f9' }}>Permit Authoriser</td>
+                <td style={{ border: '1px solid #000', padding: '4px' }}>{page4.permit_issuance?.authoriser || 'Pending'}</td>
+                <td style={{ border: '1px solid #000', padding: '4px' }}><em>{page4.permit_issuance?.authoriser ? 'Signed electronically' : 'Pending Approval'}</em></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
   )
 }
