@@ -47,3 +47,30 @@ export function TextField({ id, value, onChange, placeholder, type = 'text' }) {
     />
   )
 }
+
+export function TimeField({ id, value, onChange }) {
+  const [h, m] = (value || '00:00').split(':')
+  let hr = parseInt(h || '0', 10)
+  const isPM = hr >= 12
+  const hr12 = hr % 12 || 12
+
+  const update = (newHr12, newM, newIsPM) => {
+    let finalHr = parseInt(newHr12, 10)
+    if (isNaN(finalHr)) finalHr = 12
+    if (newIsPM && finalHr !== 12) finalHr += 12
+    if (!newIsPM && finalHr === 12) finalHr = 0
+    onChange(`${String(finalHr).padStart(2, '0')}:${String(newM).padStart(2, '0')}`)
+  }
+
+  return (
+    <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+      <input type="number" id={id} min="1" max="12" value={hr12} onChange={e => update(e.target.value, m, isPM)} style={{ width: '40px', border: 'none', outline: 'none', background: 'transparent', textAlign: 'center' }} />
+      :
+      <input type="number" min="0" max="59" value={m} onChange={e => update(hr12, e.target.value, isPM)} style={{ width: '40px', border: 'none', outline: 'none', background: 'transparent', textAlign: 'center' }} />
+      <select value={isPM ? 'PM' : 'AM'} onChange={e => update(hr12, m, e.target.value === 'PM')} style={{ border: 'none', outline: 'none', background: 'transparent' }}>
+        <option value="AM">AM</option>
+        <option value="PM">PM</option>
+      </select>
+    </div>
+  )
+}

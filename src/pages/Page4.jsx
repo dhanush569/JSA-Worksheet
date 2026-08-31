@@ -3,7 +3,7 @@ import {
   FaArrowLeft, FaArrowRight, FaCircleCheck, FaFloppyDisk, FaSpinner,
   FaFileContract, FaTriangleExclamation, FaShieldHalved, FaRoute, FaEnvelope, FaFilePdf
 } from 'react-icons/fa6'
-import { Field, Row, TextField } from '../components/Field.jsx'
+import { Field, Row, TextField, TimeField } from '../components/Field.jsx'
 import PermitStrip from '../components/PermitStrip.jsx'
 import CameraCapture from '../components/CameraCapture.jsx'
 import { RiskPill } from '../components/Pills.jsx'
@@ -11,6 +11,7 @@ import Modal from '../components/Modal.jsx'
 import { useToast } from '../components/Toast.jsx'
 import { api } from '../api/client.js'
 import { useJsa } from '../context/JsaContext.jsx'
+import PtwPdfPreview from '../components/PtwPdfPreview.jsx'
 
 const CHECKLIST_SECTIONS = [
   {
@@ -216,10 +217,10 @@ export default function Page4({ onBack, onNext }) {
               <TextField type="date" value={page4.date || ''} onChange={(v) => setPtwField('date', v)} />
             </Field>
             <Field label="Start time">
-              <TextField type="time" value={page4.start_time || ''} onChange={(v) => setPtwField('start_time', v)} />
+              <TimeField value={page4.start_time || ''} onChange={(v) => setPtwField('start_time', v)} />
             </Field>
             <Field label="End time">
-              <TextField type="time" value={page4.end_time || ''} onChange={(v) => setPtwField('end_time', v)} />
+              <TimeField value={page4.end_time || ''} onChange={(v) => setPtwField('end_time', v)} />
             </Field>
           </Row>
         </section>
@@ -363,7 +364,7 @@ export default function Page4({ onBack, onNext }) {
               <TextField type="date" value={page4.verification_hse?.date || ''} onChange={(v) => setPtwField('verification_hse', { ...page4.verification_hse, date: v })} />
             </Field>
             <Field label="Time">
-              <TextField type="time" value={page4.verification_hse?.time || ''} onChange={(v) => setPtwField('verification_hse', { ...page4.verification_hse, time: v })} />
+              <TimeField value={page4.verification_hse?.time || ''} onChange={(v) => setPtwField('verification_hse', { ...page4.verification_hse, time: v })} />
             </Field>
             <Field label="Name of the HSE personnel (Signature)">
               <TextField value={page4.verification_hse?.hse_name || ''} onChange={(v) => setPtwField('verification_hse', { ...page4.verification_hse, hse_name: v })} />
@@ -383,7 +384,7 @@ export default function Page4({ onBack, onNext }) {
               <TextField value={page4.permit_extension?.reason || ''} onChange={(v) => setPtwField('permit_extension', { ...page4.permit_extension, reason: v })} />
             </Field>
             <Field label="Time extended to">
-              <TextField type="time" value={page4.permit_extension?.time_extended_to || ''} onChange={(v) => setPtwField('permit_extension', { ...page4.permit_extension, time_extended_to: v })} />
+              <TimeField value={page4.permit_extension?.time_extended_to || ''} onChange={(v) => setPtwField('permit_extension', { ...page4.permit_extension, time_extended_to: v })} />
             </Field>
           </Row>
           <Row>
@@ -551,15 +552,20 @@ export default function Page4({ onBack, onNext }) {
             </table>
 
             <h3 style={{ marginTop: '20px', marginBottom: '8px' }}>Attachments</h3>
-            <a href="/ptw_template.html" target="_blank" rel="noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: '#fff', border: '1px solid #cbd5e1', borderRadius: '4px', cursor: 'pointer' }}>
-                <FaFilePdf size={24} color="#ef4444" />
-                <div>
-                  <div style={{ fontWeight: 'bold' }}>PTW_{page4.permit_number || page1.permit_no || 'Draft'}.pdf</div>
-                  <div style={{ fontSize: '0.8em', color: '#64748b' }}>Complete Permit to Work Sheet</div>
-                </div>
+            <div 
+              onClick={() => {
+                const w = window.open('', '_blank');
+                w.document.write('<html><head><title>PTW Preview</title><style>@media print { body { margin: 0; } }</style></head><body style="background: #e2e8f0; margin: 0; padding: 20px;">' + document.getElementById('pdf-preview-container').innerHTML + '</body></html>');
+                w.document.close();
+              }} 
+              style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: '#fff', border: '1px solid #cbd5e1', borderRadius: '4px', cursor: 'pointer' }}
+            >
+              <FaFilePdf size={24} color="#ef4444" />
+              <div>
+                <div style={{ fontWeight: 'bold' }}>PTW_{page4.permit_number || page1.permit_no || 'Draft'}.pdf</div>
+                <div style={{ fontSize: '0.8em', color: '#64748b' }}>Complete Permit to Work Sheet (Click to view)</div>
               </div>
-            </a>
+            </div>
 
             <div style={{ marginTop: '30px', display: 'flex', gap: '10px' }}>
               <button style={{ padding: '10px 16px', background: '#10b981', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>Accept</button>
@@ -573,6 +579,11 @@ export default function Page4({ onBack, onNext }) {
           </div>
         </Modal>
       )}
+
+      {/* Hidden container for the dynamic PDF preview generation */}
+      <div id="pdf-preview-container" style={{ display: 'none' }}>
+        <PtwPdfPreview />
+      </div>
 
     </fieldset>
   )
