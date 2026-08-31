@@ -1,6 +1,6 @@
 import { useJsa } from '../context/JsaContext.jsx'
 import { WORK_PERMITS } from '../data/permits.js'
-import { FaCheckCircle } from 'react-icons/fa6'
+import { FaCheck } from 'react-icons/fa6'
 
 const CHECKLIST_SECTIONS = [
   {
@@ -181,7 +181,7 @@ export default function PtwPdfPreview() {
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
                   {activePermits.length > 0 ? activePermits.map(wp => (
                     <div key={wp.key} style={{ background: brandLight, border: `1px solid ${brandBlue}`, color: brandBlue, padding: '4px 12px', borderRadius: '999px', fontSize: '12px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <FaCheckCircle /> {wp.label}
+                      <FaCheck /> {wp.label}
                     </div>
                   )) : (
                     <div style={{ color: '#8593a6', fontStyle: 'italic' }}>No specific work types selected.</div>
@@ -219,7 +219,7 @@ export default function PtwPdfPreview() {
                     </div>
                     {section.questions.map((q, qIdx) => (
                       <div key={qIdx} style={{ margin: '6px 0', display: 'flex', alignItems: 'flex-start', lineHeight: '1.4' }}>
-                        <FaCheckCircle style={{ color: '#0b8a53', marginTop: '3px', marginRight: '8px', flexShrink: 0 }} /> 
+                        <FaCheck style={{ color: '#0b8a53', marginTop: '3px', marginRight: '8px', flexShrink: 0 }} /> 
                         <span>{q}</span>
                       </div>
                     ))}
