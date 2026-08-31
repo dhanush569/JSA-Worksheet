@@ -171,7 +171,7 @@ export default function PtwPdfPreview() {
             <strong style={{ color: brandNavy, display: 'block', marginBottom: '6px', fontSize: '11px' }}>Work Types Permitted:</strong>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '5px', margin: '5px 0' }}>
                 {activePermits.length > 0 ? activePermits.map(wp => (
-                  <div key={wp.key}>[<span style={{ color: brandBlue, fontWeight: 'bold' }}>X</span>] {wp.label}</div>
+                  <div key={wp.key} style={{ display: 'flex', alignItems: 'center' }}><span style={{ color: brandBlue, fontWeight: 'bold', fontSize: '14px', marginRight: '5px' }}>•</span> {wp.label}</div>
                 )) : (
                   <div>None selected</div>
                 )}
@@ -200,7 +200,7 @@ export default function PtwPdfPreview() {
                     <strong style={{ display: 'block', marginBottom: '6px', color: brandNavy, fontSize: '11px' }}>{section.title}</strong>
                     {section.questions.map((q, qIdx) => (
                       <div key={qIdx} style={{ margin: '4px 0', display: 'flex', alignItems: 'flex-start' }}>
-                        <span style={{ marginRight: '6px', fontFamily: 'monospace', fontSize: '13px', color: brandBlue, fontWeight: 'bold' }}>[X]</span>
+                        <span style={{ marginRight: '6px', fontSize: '14px', color: brandBlue, fontWeight: 'bold', lineHeight: '1' }}>•</span>
                         <span>{q}</span>
                       </div>
                     ))}
