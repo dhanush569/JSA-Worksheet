@@ -95,6 +95,16 @@ export default function PtwPdfPreview() {
 
   // Format date/time helpers
   const todayDate = new Date().toISOString().slice(0, 10)
+  const formatTime12h = (timeStr) => {
+    if (!timeStr) return '00:00 AM'
+    const parts = timeStr.split(':')
+    if (parts.length < 2) return timeStr
+    const h = parseInt(parts[0], 10)
+    const m = parts[1]
+    const suffix = h >= 12 ? 'PM' : 'AM'
+    const hours12 = h % 12 || 12
+    return `${hours12.toString().padStart(2, '0')}:${m} ${suffix}`
+  }
   
   // Get active work permits
   const activePermits = WORK_PERMITS.filter(wp => page1.work_permits && page1.work_permits[wp.key])
@@ -146,7 +156,7 @@ export default function PtwPdfPreview() {
                 <td style={{ border: `1px solid ${borderColor}`, padding: '6px', fontWeight: 'bold', fontSize: '11px', backgroundColor: bgLight, color: brandNavy }}>Date</td>
                 <td style={{ border: `1px solid ${borderColor}`, padding: '6px' }}>{page4.date || todayDate}</td>
                 <td style={{ border: `1px solid ${borderColor}`, padding: '6px', fontWeight: 'bold', fontSize: '11px', backgroundColor: bgLight, color: brandNavy }}>Time (Start / End)</td>
-                <td style={{ border: `1px solid ${borderColor}`, padding: '6px' }}>{page4.start_time || '00:00'} to {page4.end_time || '00:00'}</td>
+                <td style={{ border: `1px solid ${borderColor}`, padding: '6px' }}>{formatTime12h(page4.start_time)} to {formatTime12h(page4.end_time)}</td>
             </tr>
             <tr>
                 <td style={{ border: `1px solid ${borderColor}`, padding: '6px', fontWeight: 'bold', fontSize: '11px', backgroundColor: bgLight, color: brandNavy }}>Location</td>
