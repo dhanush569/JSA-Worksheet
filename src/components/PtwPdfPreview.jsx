@@ -138,7 +138,7 @@ export default function PtwPdfPreview() {
   const textColor = '#141b26'
 
   return (
-    <div style={{ backgroundColor: '#fff', color: textColor, padding: '20px', fontFamily: 'Arial, "Helvetica Neue", Helvetica, sans-serif', fontSize: '12px', maxWidth: '800px', margin: '0 auto', lineHeight: '1.4' }}>
+    <div style={{ backgroundColor: '#fff', color: textColor, padding: '20px', fontFamily: 'Arial, "Helvetica Neue", Helvetica, sans-serif', fontSize: '11px', maxWidth: '800px', margin: '0 auto', lineHeight: '1.4' }}>
         <h1 style={{ textAlign: 'center', fontSize: '18px', margin: '0 0 5px 0', textTransform: 'uppercase', color: brandNavy }}>PERMIT TO WORK (PTW)</h1>
         <div style={{ textAlign: 'center', fontSize: '10px', marginBottom: '15px', fontWeight: 'bold', color: '#5f6d80' }}>Document Ref: FR-HSE-07 | Rev: 00</div>
 
