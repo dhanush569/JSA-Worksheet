@@ -128,7 +128,7 @@ export default function PtwPdfPreview() {
   const textColor = '#141b26'
 
   return (
-    <div style={{ backgroundColor: '#fff', color: textColor, padding: '20px', fontFamily: '"Inter Variable", "Inter", system-ui, sans-serif', fontSize: '11.5px', maxWidth: '800px', margin: '0 auto' }}>
+    <div style={{ backgroundColor: '#fff', color: textColor, padding: '20px', fontFamily: 'Arial, "Helvetica Neue", Helvetica, sans-serif', fontSize: '11px', maxWidth: '800px', margin: '0 auto', lineHeight: '1.4' }}>
         <h1 style={{ textAlign: 'center', fontSize: '18px', margin: '0 0 5px 0', textTransform: 'uppercase', color: brandNavy }}>PERMIT TO WORK (PTW)</h1>
         <div style={{ textAlign: 'center', fontSize: '10px', marginBottom: '15px', fontWeight: 'bold', color: '#5f6d80' }}>Document Ref: FR-HSE-07 | Rev: 00</div>
 
@@ -168,7 +168,7 @@ export default function PtwPdfPreview() {
         {/* 2. TYPE OF WORK & SUPPORTING DOCS */}
         <div style={{ backgroundColor: brandNavy, color: '#fff', fontWeight: 'bold', padding: '6px 8px', border: `1px solid ${brandNavy}`, marginTop: '10px', fontSize: '12px' }}>2. TYPE OF WORK & SUPPORTING DOCUMENTS</div>
         <div style={{ border: `1px solid ${borderColor}`, padding: '8px', borderTop: 'none', marginBottom: '10px' }}>
-            <strong style={{ color: brandNavy, display: 'block', marginBottom: '6px' }}>Work Types Permitted:</strong>
+            <strong style={{ color: brandNavy, display: 'block', marginBottom: '6px', fontSize: '12px' }}>Work Types Permitted:</strong>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '5px', margin: '5px 0' }}>
                 {activePermits.length > 0 ? activePermits.map(wp => (
                   <div key={wp.key}>[<span style={{ color: brandBlue, fontWeight: 'bold' }}>X</span>] {wp.label}</div>
@@ -179,12 +179,12 @@ export default function PtwPdfPreview() {
             <table style={{ marginTop: '10px', marginBottom: '0', width: '100%', borderCollapse: 'collapse', backgroundColor: bgLight }}>
                 <tbody>
                 <tr>
-                    <td style={{ border: `1px solid ${borderColor}`, fontWeight: 'bold', width: '15%', padding: '6px', color: brandNavy }}>LOTO Number:</td>
-                    <td style={{ border: `1px solid ${borderColor}`, width: '18%', padding: '6px', backgroundColor: '#fff' }}>{page4.loto_number || 'N/A'}</td>
-                    <td style={{ border: `1px solid ${borderColor}`, fontWeight: 'bold', width: '15%', padding: '6px', color: brandNavy }}>TBT Ref:</td>
-                    <td style={{ border: `1px solid ${borderColor}`, width: '18%', padding: '6px', backgroundColor: '#fff' }}>{page4.tbt_number || 'N/A'}</td>
-                    <td style={{ border: `1px solid ${borderColor}`, fontWeight: 'bold', width: '15%', padding: '6px', color: brandNavy }}>JSA Attached:</td>
-                    <td style={{ border: `1px solid ${borderColor}`, padding: '6px', backgroundColor: '#fff' }}>{page4.jsa_checked ? 'Yes' : 'No'}</td>
+                    <td style={{ border: `1px solid ${borderColor}`, fontWeight: 'bold', padding: '6px', color: brandNavy, whiteSpace: 'nowrap' }}>LOTO Number:</td>
+                    <td style={{ border: `1px solid ${borderColor}`, padding: '6px', backgroundColor: '#fff', width: '25%' }}>{page4.loto_number || 'N/A'}</td>
+                    <td style={{ border: `1px solid ${borderColor}`, fontWeight: 'bold', padding: '6px', color: brandNavy, whiteSpace: 'nowrap' }}>TBT Ref:</td>
+                    <td style={{ border: `1px solid ${borderColor}`, padding: '6px', backgroundColor: '#fff', width: '25%' }}>{page4.tbt_number || 'N/A'}</td>
+                    <td style={{ border: `1px solid ${borderColor}`, fontWeight: 'bold', padding: '6px', color: brandNavy, whiteSpace: 'nowrap' }}>JSA Attached:</td>
+                    <td style={{ border: `1px solid ${borderColor}`, padding: '6px', backgroundColor: '#fff', width: '15%' }}>{page4.jsa_checked ? 'Yes' : 'No'}</td>
                 </tr>
                 </tbody>
             </table>
@@ -197,11 +197,11 @@ export default function PtwPdfPreview() {
               <div>
                 {activeChecklists.map((section, idx) => (
                   <div key={idx} style={{ marginBottom: '12px' }}>
-                    <strong style={{ display: 'block', marginBottom: '6px', color: brandNavy }}>{section.title}</strong>
+                    <strong style={{ display: 'block', marginBottom: '6px', color: brandNavy, fontSize: '12px' }}>{section.title}</strong>
                     {section.questions.map((q, qIdx) => (
                       <div key={qIdx} style={{ margin: '4px 0', display: 'flex', alignItems: 'flex-start' }}>
                         <span style={{ marginRight: '6px', fontFamily: 'monospace', fontSize: '13px', color: brandBlue, fontWeight: 'bold' }}>[X]</span>
-                        <span style={{ lineHeight: '1.3' }}>{q}</span>
+                        <span>{q}</span>
                       </div>
                     ))}
                   </div>
@@ -215,7 +215,7 @@ export default function PtwPdfPreview() {
         {/* 4. PERMIT ISSUANCE */}
         <div style={{ backgroundColor: brandNavy, color: '#fff', fontWeight: 'bold', padding: '6px 8px', border: `1px solid ${brandNavy}`, marginTop: '10px', fontSize: '12px' }}>4. PERMIT ISSUANCE</div>
         <div style={{ border: `1px solid ${borderColor}`, padding: '10px', borderTop: 'none' }}>
-            <p style={{ fontStyle: 'italic', fontSize: '10.5px', margin: '0 0 10px 0', color: '#5f6d80' }}>We have inspected the location and confirmed all necessary precautions are in place. The location is safe for work.</p>
+            <p style={{ fontStyle: 'italic', fontSize: '11px', margin: '0 0 10px 0', color: '#5f6d80' }}>We have inspected the location and confirmed all necessary precautions are in place. The location is safe for work.</p>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <tbody>
                 <tr>
@@ -226,17 +226,17 @@ export default function PtwPdfPreview() {
                 <tr>
                     <td style={{ border: `1px solid ${borderColor}`, padding: '6px', fontWeight: 'bold', color: brandNavy }}>Permit Initiator</td>
                     <td style={{ border: `1px solid ${borderColor}`, padding: '6px' }}>{page4.permit_issuance?.initiator || 'Pending'}</td>
-                    <td style={{ border: `1px solid ${borderColor}`, padding: '6px', color: '#0b8a53' }}><em>Signed electronically</em></td>
+                    <td style={{ border: `1px solid ${borderColor}`, padding: '6px', color: '#0b8a53', fontStyle: 'italic' }}>Signed electronically</td>
                 </tr>
                 <tr>
                     <td style={{ border: `1px solid ${borderColor}`, padding: '6px', fontWeight: 'bold', color: brandNavy }}>Contractor</td>
                     <td style={{ border: `1px solid ${borderColor}`, padding: '6px' }}>{page4.permit_issuance?.contractor || 'Pending'}</td>
-                    <td style={{ border: `1px solid ${borderColor}`, padding: '6px', color: page4.permit_issuance?.contractor ? '#0b8a53' : '#8593a6' }}><em>{page4.permit_issuance?.contractor ? 'Signed electronically' : 'Pending'}</em></td>
+                    <td style={{ border: `1px solid ${borderColor}`, padding: '6px', color: page4.permit_issuance?.contractor ? '#0b8a53' : '#8593a6', fontStyle: 'italic' }}>{page4.permit_issuance?.contractor ? 'Signed electronically' : 'Pending'}</td>
                 </tr>
                 <tr>
                     <td style={{ border: `1px solid ${borderColor}`, padding: '6px', fontWeight: 'bold', color: brandNavy }}>Permit Authoriser</td>
                     <td style={{ border: `1px solid ${borderColor}`, padding: '6px' }}>{page4.permit_issuance?.authoriser || 'Pending'}</td>
-                    <td style={{ border: `1px solid ${borderColor}`, padding: '6px', color: page4.permit_issuance?.authoriser ? '#0b8a53' : '#b07600' }}><em>{page4.permit_issuance?.authoriser ? 'Signed electronically' : 'Pending Approval'}</em></td>
+                    <td style={{ border: `1px solid ${borderColor}`, padding: '6px', color: page4.permit_issuance?.authoriser ? '#0b8a53' : '#b07600', fontStyle: 'italic' }}>{page4.permit_issuance?.authoriser ? 'Signed electronically' : 'Pending Approval'}</td>
                 </tr>
                 </tbody>
             </table>
