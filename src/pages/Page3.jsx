@@ -20,7 +20,7 @@ export default function Page3({ onBack, onNext }) {
     page1, setField, teamMembers, setTeamMembers, signOff, setSignOff,
     jobSteps, savePage3, savingPage, worksheetId, isEditable, status,
     approvalSteps, contractor, approvers, setApprovers,
-    sendContractorCode, verifyContractorCode, submitForApproval,
+    sendContractorCode, verifyContractorCode, submitForApproval, permitsTicked,
   } = useJsa()
   const { user } = useAuth()
   const toast = useToast()
@@ -356,7 +356,12 @@ export default function Page3({ onBack, onNext }) {
 
       {/* ------------------------------------------------ actions */}
       <div className="actionbar actionbar-sticky">
-        {blockers.length > 0 && isEditable ? (
+        {isOnlyExempt && blockers.length > 0 && isEditable ? (
+          <span className="status-line">
+            <FaCircleInfo size={12} style={{ color: 'var(--brand-blue)' }} /> 
+            Tabs 2 & 3 are optional for General/Sunday work. You may skip to PTW.
+          </span>
+        ) : blockers.length > 0 && isEditable ? (
           <span className="status-line warn">
             <FaTriangleExclamation size={12} /> {blockers[0]}
             {blockers.length > 1 && ` (+${blockers.length - 1} more)`}

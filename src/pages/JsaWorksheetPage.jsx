@@ -34,10 +34,8 @@ export default function JsaWorksheetPage() {
 
   const STEPS = []
   STEPS.push(ALL_STEPS[0])
-  if (!isOnlyExempt) {
-    STEPS.push(ALL_STEPS[1])
-    STEPS.push(ALL_STEPS[2])
-  }
+  STEPS.push(ALL_STEPS[1])
+  STEPS.push(ALL_STEPS[2])
   if (showPtw) {
     STEPS.push(ALL_STEPS[3])
   }
@@ -97,10 +95,10 @@ export default function JsaWorksheetPage() {
       </nav>
 
       <main className="sheet">
-        {page === 1 && <Page1 onNext={() => setPage(isOnlyExempt ? 4 : 2)} />}
-        {page === 2 && !isOnlyExempt && <Page2 onBack={() => setPage(1)} onNext={() => setPage(3)} />}
-        {page === 3 && !isOnlyExempt && <Page3 onBack={() => setPage(2)} onNext={showPtw ? () => setPage(4) : null} />}
-        {page === 4 && showPtw && <Page4 onBack={isOnlyExempt ? () => setPage(1) : () => setPage(3)} />}
+        {page === 1 && <Page1 onNext={() => setPage(2)} />}
+        {page === 2 && <Page2 onBack={() => setPage(1)} onNext={() => setPage(3)} />}
+        {page === 3 && <Page3 onBack={() => setPage(2)} onNext={showPtw ? () => setPage(4) : null} />}
+        {page === 4 && showPtw && <Page4 onBack={() => setPage(3)} />}
       </main>
     </>
   )
