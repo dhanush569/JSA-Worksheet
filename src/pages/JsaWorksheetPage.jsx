@@ -78,8 +78,16 @@ export default function JsaWorksheetPage() {
                   onClick={() => setPage(n)}>
             <span className="rail-num" aria-hidden="true">{n}</span>
             <Icon size={13} aria-hidden="true" />
-            <span className="rail-step-long">{label}</span>
-            <span className="rail-step-short">{short}</span>
+            <span className="rail-step-long">
+              {label}
+              {isOnlyExempt && (n === 2 || n === 3) && (
+                <span style={{ color: 'var(--brand-blue)', fontStyle: 'italic', fontSize: '0.9em', marginLeft: '6px', opacity: 0.8 }}>(Optional)</span>
+              )}
+            </span>
+            <span className="rail-step-short">
+              {short}
+              {isOnlyExempt && (n === 2 || n === 3) && <span style={{ opacity: 0.7 }}> *</span>}
+            </span>
           </button>
         ))}
 
