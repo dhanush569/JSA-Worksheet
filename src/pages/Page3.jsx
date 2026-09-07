@@ -25,6 +25,8 @@ export default function Page3({ onBack, onNext }) {
   const { user } = useAuth()
   const toast = useToast()
 
+  const isOnlyExempt = permitsTicked && permitsTicked.length > 0 && permitsTicked.every(p => p === 'sunday_holiday' || p === 'general_work')
+
   const [pools, setPools] = useState({ lvl1_approver: [], lvl2_approver: [], ph_approver: [] })
   const [contractorEmail, setContractorEmail] = useState(contractor.email || '')
   const [code, setCode] = useState('')
