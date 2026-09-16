@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useMemo, useState, useEffect } from 'react'
 import { api } from '../api/client.js'
 
 const JsaContext = createContext(null)
@@ -110,6 +110,15 @@ export function JsaProvider({ children }) {
   const [contractor, setContractor] = useState({ email: '', verified: false, sentAt: null })
   const [approvers, setApprovers] = useState({ lvl1: '', lvl2: '', ph: '' })
   const [savingPage, setSavingPage] = useState(null)
+
+  // Auto-save everything to localStorage as they type
+  useEffect(() => {
+    try {
+      const key = 'jsa_autosave_' + (worksheetId || 'new');
+      const data = { page1, page4, jobSteps, teamMembers, signOff, contractor, approvers };
+      window.localStorage.setItem(key, JSON.stringify(data));
+    } catch {}
+  }, [worksheetId, page1, page4, jobSteps, teamMembers, signOff, contractor, approvers]);
 
   const setPtwField = useCallback((name, value) => {
     setPage4((prev) => ({ ...prev, [name]: value }))
@@ -245,6 +254,28 @@ export function JsaProvider({ children }) {
   // ----------------------------------------------------------------- loading
   const loadWorksheet = useCallback(async (id) => {
     const ws = await api.getWorksheet(id)
+
+    // Check if we have a fresher autosave locally
+    let saved = null;
+    try {
+      saved = JSON.parse(window.localStorage.getItem('jsa_autosave_' + id));
+    } catch {}
+
+    if (saved) {
+      setWorksheetId(ws.id)
+      setStatus(ws.status)
+      setIsEditable(ws.is_editable)
+      setApprovalSteps(ws.approval_steps || [])
+      setPage1(saved.page1 || emptyPage1());
+      setPage4(saved.page4 || emptyPage4());
+      setJobSteps(saved.jobSteps || Array.from({ length: 6 }, blankStep));
+      setTeamMembers(saved.teamMembers || Array.from({ length: 6 }, blankMember));
+      setSignOff(saved.signOff || emptySignOff());
+      setContractor(saved.contractor || { email: '', verified: false, sentAt: null });
+      setApprovers(saved.approvers || { lvl1: '', lvl2: '', ph: '' });
+      return;
+    }
+
     const shape = emptyPage1()
     setPage1({
       ...shape,
@@ -310,6 +341,24 @@ export function JsaProvider({ children }) {
   }, [absorb])
 
   const resetWorksheet = useCallback((defaults = {}) => {
+    try {
+      const saved = JSON.parse(window.localStorage.getItem('jsa_autosave_new'));
+      if (saved) {
+        setWorksheetId(null);
+        setStatus('draft');
+        setIsEditable(true);
+        setPage1(saved.page1 || { ...emptyPage1(), ...defaults });
+        setPage4(saved.page4 || emptyPage4());
+        setJobSteps(saved.jobSteps || Array.from({ length: 6 }, blankStep));
+        setTeamMembers(saved.teamMembers || Array.from({ length: 6 }, blankMember));
+        setSignOff(saved.signOff || emptySignOff());
+        setApprovalSteps([]);
+        setContractor(saved.contractor || { email: '', verified: false, sentAt: null });
+        setApprovers(saved.approvers || { lvl1: '', lvl2: '', ph: '' });
+        return;
+      }
+    } catch {}
+
     setWorksheetId(null)
     setStatus('draft')
     setIsEditable(true)
