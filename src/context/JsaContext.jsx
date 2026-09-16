@@ -101,14 +101,19 @@ export function JsaProvider({ children }) {
   const [worksheetId, setWorksheetId] = useState(null)
   const [status, setStatus] = useState('draft')
   const [isEditable, setIsEditable] = useState(true)
-  const [page1, setPage1] = useState(emptyPage1)
-  const [page4, setPage4] = useState(emptyPage4)
-  const [jobSteps, setJobSteps] = useState(() => Array.from({ length: 6 }, blankStep))
-  const [teamMembers, setTeamMembers] = useState(() => Array.from({ length: 6 }, blankMember))
-  const [signOff, setSignOff] = useState(emptySignOff)
+
+  const _getId = () => { try { const p = window.location.pathname; return p.startsWith('/jsa/') && p.split('/')[2] !== 'new' ? p.split('/')[2] : 'new'; } catch { return 'new' } }
+  const _getLs = (key, fallback) => { try { const s = JSON.parse(window.localStorage.getItem('jsa_autosave_' + _getId())); return s && s[key] ? s[key] : fallback; } catch { return fallback; } }
+
+  const [page1, setPage1] = useState(() => _getLs('page1', emptyPage1()))
+  const [page4, setPage4] = useState(() => _getLs('page4', emptyPage4()))
+  const [jobSteps, setJobSteps] = useState(() => _getLs('jobSteps', Array.from({ length: 6 }, blankStep)))
+  const [teamMembers, setTeamMembers] = useState(() => _getLs('teamMembers', Array.from({ length: 6 }, blankMember)))
+  const [signOff, setSignOff] = useState(() => _getLs('signOff', emptySignOff()))
+  const [contractor, setContractor] = useState(() => _getLs('contractor', { email: '', verified: false, sentAt: null }))
+  const [approvers, setApprovers] = useState(() => _getLs('approvers', { lvl1: '', lvl2: '', ph: '' }))
+
   const [approvalSteps, setApprovalSteps] = useState([])
-  const [contractor, setContractor] = useState({ email: '', verified: false, sentAt: null })
-  const [approvers, setApprovers] = useState({ lvl1: '', lvl2: '', ph: '' })
   const [savingPage, setSavingPage] = useState(null)
 
   // Auto-save everything to localStorage as they type
