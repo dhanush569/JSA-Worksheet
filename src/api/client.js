@@ -148,14 +148,59 @@ export const api = {
     return {};
   },
 
-  listWorksheets: async () => [],
-  getWorksheet: async (id) => ({ id, status: 'draft', is_editable: true }),
-  createWorksheet: async (body) => ({ id: Math.random().toString(36).substring(2, 9), status: 'draft', is_editable: true }),
-  updateWorksheet: async (id, body) => ({ id, status: 'draft', is_editable: true }),
-  deleteWorksheet: async (id) => ({}),
-  duplicateWorksheet: async (id) => ({ id: Math.random().toString(36).substring(2, 9), status: 'draft', is_editable: true }),
-  savePage2: async (id, body) => ({ id, status: 'draft', is_editable: true }),
-  savePage3: async (id, body) => ({ id, status: 'draft', is_editable: true }),
+  listWorksheets: async () => {
+    try {
+      const wks = JSON.parse(window.localStorage.getItem('mockWorksheets') || '[]');
+      return wks.sort((a,b) => b.updatedAt - a.updatedAt);
+    } catch { return []; }
+  },
+  getWorksheet: async (id) => {
+    try {
+      const wks = JSON.parse(window.localStorage.getItem('mockWorksheets') || '[]');
+      return wks.find(w => w.id === id) || { id, status: 'draft', is_editable: true };
+    } catch { return { id, status: 'draft', is_editable: true }; }
+  },
+  createWorksheet: async (body) => {
+    const wks = JSON.parse(window.localStorage.getItem('mockWorksheets') || '[]');
+    const newId = Math.random().toString(36).substring(2, 9);
+    const newWorksheet = { 
+      id: newId, 
+      status: 'draft', 
+      is_editable: true, 
+      updatedAt: Date.now(),
+      ...body 
+    };
+    wks.push(newWorksheet);
+    window.localStorage.setItem('mockWorksheets', JSON.stringify(wks));
+    return newWorksheet;
+  },
+  updateWorksheet: async (id, body) => {
+    const wks = JSON.parse(window.localStorage.getItem('mockWorksheets') || '[]');
+    const idx = wks.findIndex(w => w.id === id);
+    if (idx >= 0) {
+      wks[idx] = { ...wks[idx], ...body, updatedAt: Date.now() };
+      window.localStorage.setItem('mockWorksheets', JSON.stringify(wks));
+      return wks[idx];
+    }
+    return { id, status: 'draft', is_editable: true };
+  },
+  deleteWorksheet: async (id) => {
+    let wks = JSON.parse(window.localStorage.getItem('mockWorksheets') || '[]');
+    wks = wks.filter(w => w.id !== id);
+    window.localStorage.setItem('mockWorksheets', JSON.stringify(wks));
+    return {};
+  },
+  duplicateWorksheet: async (id) => {
+    const wks = JSON.parse(window.localStorage.getItem('mockWorksheets') || '[]');
+    const exist = wks.find(w => w.id === id);
+    const newId = Math.random().toString(36).substring(2, 9);
+    const newWk = exist ? { ...exist, id: newId, status: 'draft', updatedAt: Date.now() } : { id: newId, status: 'draft', is_editable: true };
+    wks.push(newWk);
+    window.localStorage.setItem('mockWorksheets', JSON.stringify(wks));
+    return newWk;
+  },
+  savePage2: async (id, body) => api.updateWorksheet(id, body),
+  savePage3: async (id, body) => api.updateWorksheet(id, body),
 
   sendContractorCode: async (id, contractor_email) => ({ message: 'Mock code sent', email_status: 'queued', dev_code: '123456' }),
   verifyContractorCode: async (id, code) => {
